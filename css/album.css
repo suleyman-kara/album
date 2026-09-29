@@ -1,0 +1,516 @@
+/**
+ * album.css
+ * A4 Sayfa Boyutları, Kapak, Hikaye, Akıllı Kolaj ve Arka Kapak Mimarisi
+ */
+
+/* ==========================================================================
+   ALBÜM VE SAYFA TEMELLERİ (A4 BOYUTLANDIRMA)
+   ========================================================================== */
+.album-viewport {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 30px 16px 80px 16px;
+  overflow-y: auto;
+}
+
+.album-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  transition: all 0.3s ease;
+}
+
+/* A4 Standart Ölçüleri:
+   Yatay (Landscape): 297mm genişlik x 210mm yükseklik
+   Dikey (Portrait): 210mm genişlik x 297mm yükseklik
+*/
+.album-page {
+  box-sizing: border-box;
+  position: relative;
+  background-color: var(--bg-page, #ffffff);
+  color: var(--text-main, #18181b);
+  font-family: var(--font-body, sans-serif);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  page-break-after: always;
+  break-after: page;
+}
+
+/* YATAY (LANDSCAPE) */
+.album-container.orientation-landscape .album-page {
+  width: 297mm;
+  height: 210mm;
+  padding: 18mm 20mm;
+}
+
+/* DİKEY (PORTRAIT) */
+.album-container.orientation-portrait .album-page {
+  width: 210mm;
+  height: 297mm;
+  padding: 22mm 18mm;
+}
+
+/* ==========================================================================
+   1. ÖN KAPAK (COVER PAGE)
+   ========================================================================== */
+.page-cover {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.cover-inner {
+  width: 100%;
+  height: 100%;
+  border: var(--cover-border, 1px solid rgba(0,0,0,0.1));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10mm 8mm;
+  border-radius: 2px;
+}
+
+.cover-header {
+  margin-top: 4mm;
+}
+
+.cover-tag {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent-color, #2563eb);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.cover-title {
+  font-family: var(--font-title, serif);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 10px 0;
+  color: var(--text-main);
+  max-width: 800px;
+}
+
+.cover-subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.cover-photo-wrapper {
+  flex: 1;
+  width: 100%;
+  max-height: 52%;
+  margin: 12px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cover-photo-frame {
+  width: 72%;
+  height: 100%;
+  border-radius: var(--photo-radius, 4px);
+  overflow: hidden;
+  box-shadow: var(--photo-shadow);
+  border: var(--photo-border);
+  background: var(--photo-bg);
+}
+
+.cover-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cover-footer {
+  margin-bottom: 2mm;
+}
+
+.cover-divider {
+  width: 60px;
+  height: 2px;
+  background: var(--accent-color, #2563eb);
+  margin: 0 auto 10px auto;
+  opacity: 0.6;
+}
+
+.cover-date {
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   2. HİKAYE SAYFASI (STORY PAGE - SOL SAYFA)
+   ========================================================================== */
+.page-story {
+  justify-content: space-between;
+}
+
+.story-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.story-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.story-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.story-title {
+  font-family: var(--font-title, serif);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.3;
+  margin: 0 0 16px 0;
+}
+
+.story-divider {
+  width: 45px;
+  height: 3px;
+  background: var(--accent-color);
+  margin: 0 0 24px 0;
+  border-radius: 2px;
+}
+
+.story-text {
+  font-size: 15.5px;
+  line-height: 1.9;
+  color: var(--text-main);
+  margin: 0;
+  text-align: justify;
+  hyphens: auto;
+  word-break: break-word;
+}
+
+/* İlk harf Drop-Cap süslemesi */
+.story-text::first-letter {
+  font-family: var(--font-title, serif);
+  font-size: 3.4em;
+  float: left;
+  line-height: 0.8;
+  margin-right: 12px;
+  margin-top: 4px;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* Sayfa Alt Bilgisi & Numaralandırma */
+.page-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-color);
+  padding-top: 8px;
+}
+
+.page-watermark {
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  opacity: 0.8;
+}
+
+.page-number {
+  font-family: var(--font-title, serif);
+  font-weight: 600;
+}
+
+.page-number::before {
+  content: var(--num-prefix, '— ');
+}
+
+.page-number::after {
+  content: var(--num-suffix, ' —');
+}
+
+/* ==========================================================================
+   3. AKILLI KOLAJ SAYFASI (COLLAGE PAGE - SAĞ SAYFA)
+   ========================================================================== */
+.page-collage {
+  justify-content: space-between;
+}
+
+.collage-wrapper {
+  flex: 1;
+  width: 100%;
+  height: calc(100% - 24px);
+  margin-bottom: 8px;
+  display: flex;
+}
+
+.collage-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  gap: 14px;
+}
+
+/* Fotoğraf Kutusu */
+.photo-cell {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: var(--photo-radius, 4px);
+}
+
+.photo-frame {
+  width: 100%;
+  height: 100%;
+  background: var(--photo-bg, #fff);
+  box-shadow: var(--photo-shadow);
+  border: var(--photo-border);
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: var(--photo-radius, 4px);
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 1 FOTOĞRAF DÜZENİ */
+.collage-count-1 {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  padding: 4mm;
+}
+
+/* 2 FOTOĞRAF DÜZENİ */
+/* Yatayda yan yana 2 eşit sütun */
+.orientation-landscape .collage-count-2 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+/* Dikeyde alt alta 2 eşit satır */
+.orientation-portrait .collage-count-2 {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+/* 3 FOTOĞRAF DÜZENİ */
+/* Yatayda: Sol büyük tek (60%), Sağda üst-alt 2 (40%) */
+.orientation-landscape .collage-count-3 {
+  grid-template-columns: 1.3fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.orientation-landscape .collage-count-3 .cell-1 {
+  grid-row: span 2;
+}
+
+/* Dikeyde: Üstte büyük tek (60%), Altta yan yana 2 (40%) */
+.orientation-portrait .collage-count-3 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1.3fr 1fr;
+}
+.orientation-portrait .collage-count-3 .cell-1 {
+  grid-column: span 2;
+}
+
+/* 4 FOTOĞRAF DÜZENİ (2x2 Dengeli Izgara) */
+.collage-count-4 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+/* Boş Kolaj Uyarısı */
+.empty-collage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed var(--border-color);
+  border-radius: 8px;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 38px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   4. ARKA KAPAK (BACK COVER)
+   ========================================================================== */
+.page-back-cover {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.back-cover-inner {
+  width: 100%;
+  height: 100%;
+  border: var(--cover-border, 1px solid rgba(0,0,0,0.1));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20mm;
+}
+
+.back-cover-icon {
+  font-size: 28px;
+  color: var(--accent-color);
+  margin-bottom: 24px;
+}
+
+.back-cover-quote {
+  font-family: var(--font-title, serif);
+  font-size: 20px;
+  font-style: italic;
+  line-height: 1.6;
+  max-width: 580px;
+  color: var(--text-main);
+  margin-bottom: 28px;
+}
+
+.back-cover-author {
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   5. BÖLÜNMÜŞ SAYFA DÜZENİ (TEK SAYFA: METİN + KOLAJ)
+   ========================================================================== */
+.page-event-split {
+  justify-content: space-between;
+}
+
+.page-event-split .split-body {
+  flex: 1;
+  width: 100%;
+  height: calc(100% - 24px);
+  min-height: 0;
+  margin-bottom: 8px;
+}
+
+/* YATAY (LANDSCAPE): Yan Yana (Sol Metin, Sağ Kolaj) */
+.orientation-landscape .page-event-split .split-body {
+  display: grid;
+  grid-template-columns: 1fr 1.08fr;
+  gap: 22px;
+  align-items: stretch;
+}
+
+.orientation-landscape .page-event-split .split-text-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 8px;
+  overflow: hidden;
+}
+
+.orientation-landscape .page-event-split .split-collage-column {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+/* DİKEY (PORTRAIT): Üst / Alt (Üst Metin, Alt Kolaj) */
+.orientation-portrait .page-event-split .split-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orientation-portrait .page-event-split .split-text-column {
+  max-height: 38%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.orientation-portrait .page-event-split .split-collage-column {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Bölünmüş Sayfa Tipografi Ayarları */
+.page-event-split .story-body {
+  max-width: 100%;
+}
+
+.page-event-split .story-title {
+  font-size: 22px;
+  margin: 0 0 8px 0;
+  line-height: 1.25;
+}
+
+.page-event-split .story-divider {
+  width: 34px;
+  height: 2px;
+  margin: 0 0 12px 0;
+}
+
+.page-event-split .story-text {
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.page-event-split .story-text::first-letter {
+  font-size: 2.6em;
+  line-height: 0.8;
+  margin-right: 8px;
+  margin-top: 2px;
+}
+
+.page-event-split .collage-wrapper {
+  margin-bottom: 0;
+  height: 100%;
+}

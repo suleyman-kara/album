@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FotoAlbüm - Özel Fotoğraf Albümü & PDF Oluşturucu</title>
+
+  <!-- Google Fonts: Inter, Playfair Display, Cormorant Garamond, Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500;1,700&family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+
+  <!-- Stiller -->
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/album.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/print.css">
+
+  <!-- html2pdf.js CDN (İstemci Tarafı PDF İndirme Motoru) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+  <!-- Üst Başlık Çubuğu -->
+  <header class="app-header">
+    <div class="app-brand">
+      <div class="brand-icon">📖</div>
+      <span>FotoAlbüm Studio</span>
+    </div>
+    <div class="header-actions">
+      <button id="btn-load-sample" class="btn btn-secondary" title="Sistemi hazır anılarla test edin">
+        <span>✨</span> Örnek Albüm Yükle
+      </button>
+      <button id="btn-print" class="btn btn-outline" title="Tarayıcının yerel yazdırma penceresi ile vektörel kaydet">
+        <span>🖨️</span> Yazdır / PDF Kaydet
+      </button>
+      <button id="btn-download-pdf" class="btn btn-success" title="Tek tıkla hazır PDF dosyasını indir">
+        <span>📥</span> PDF İndir
+      </button>
+    </div>
+  </header>
+
+  <!-- Ana Uygulama Düzeni (Sol: Editör, Sağ: Önizleme) -->
+  <div class="app-layout">
+    
+    <!-- SOL PANEL: EDİTÖR -->
+    <aside class="app-sidebar">
+      <div class="sidebar-scroll">
+
+        <!-- 1. Bölüm: Sayfa Yönü, Düzeni & Tema -->
+        <section class="editor-section">
+          <div class="section-header">
+            <span class="section-title">📐 Sayfa Yönü (Format)</span>
+          </div>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn active" data-orientation="landscape">
+              <span>🖼️</span> A4 Yatay
+            </button>
+            <button type="button" class="toggle-btn" data-orientation="portrait">
+              <span>📄</span> A4 Dikey
+            </button>
+          </div>
+
+          <div class="section-header" style="margin-top: 8px;">
+            <span class="section-title">📑 Sayfa Düzeni (Mizanpaj)</span>
+          </div>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn active" data-layout="split" title="Her olay tek sayfada: yarısı metin, yarısı kolaj">
+              <span>🌗</span> Tek Sayfa (Bölünmüş)
+            </button>
+            <button type="button" class="toggle-btn" data-layout="spread" title="Her olay 2 sayfa: sol sayfa metin, sağ sayfa kolaj">
+              <span>📖</span> İki Sayfa (Geniş)
+            </button>
+          </div>
+
+          <div class="section-header" style="margin-top: 8px;">
+            <span class="section-title">🎨 Albüm Teması</span>
+          </div>
+          <div class="theme-grid">
+            <div class="theme-card" data-theme="minimalist">
+              <div class="theme-preview-box preview-minimalist">Aa</div>
+              <span class="theme-label">Klasik Minimalist</span>
+            </div>
+            <div class="theme-card active" data-theme="vintage">
+              <div class="theme-preview-box preview-vintage">Aa</div>
+              <span class="theme-label">Vintage / Parşömen</span>
+            </div>
+            <div class="theme-card" data-theme="romantic">
+              <div class="theme-preview-box preview-romantic">Aa</div>
+              <span class="theme-label">Romantik Pastel</span>
+            </div>
+            <div class="theme-card" data-theme="dark">
+              <div class="theme-preview-box preview-dark">Aa</div>
+              <span class="theme-label">Gece Galerisi</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Bölüm: Ön Kapak Bilgileri -->
+        <section class="editor-section">
+          <div class="section-header">
+            <span class="section-title">📕 Ön Kapak Bilgileri</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Albüm Başlığı</label>
+            <input type="text" id="cover-title-input" class="form-input" placeholder="Örn: Ege & Akdeniz Yolculuğu" maxlength="80">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Alt Başlık</label>
+            <input type="text" id="cover-subtitle-input" class="form-input" placeholder="Örn: Masmavi Koylar ve Unutulmaz Anlar" maxlength="120">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tarih / Sezon</label>
+            <input type="text" id="cover-date-input" class="form-input" placeholder="Örn: Ağustos 2024" maxlength="40">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kapak Fotoğrafı</label>
+            <div class="photo-uploader">
+              <div class="upload-dropzone" id="cover-dropzone">
+                <div class="dropzone-icon">🖼️</div>
+                <div class="dropzone-text">Kapak fotoğrafı seçin veya sürükleyin</div>
+                <div class="dropzone-hint">(Otomatik 1080p WebP'ye optimize edilir)</div>
+                <input type="file" id="cover-file-input" accept="image/*" style="display: none;">
+              </div>
+              <div id="cover-thumb-preview" class="uploaded-thumbnails" style="grid-template-columns: 80px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Bölüm: Olay (Anı) Ekle / Düzenle Formu -->
+        <section class="editor-section">
+          <div class="section-header">
+            <span class="section-title" id="form-event-heading">✨ Yeni Olay (Anı) Ekle</span>
+            <button type="button" id="btn-cancel-edit" class="btn-icon" style="display: none;" title="Düzenlemeyi İptal Et">✕</button>
+          </div>
+          
+          <input type="hidden" id="editing-event-id" value="">
+
+          <div class="form-group">
+            <label class="form-label">Olay Başlığı</label>
+            <input type="text" id="event-title-input" class="form-input" placeholder="Örn: Kaş & Kaputaş’ın Büyüsü" maxlength="70">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tarih & Lokasyon</label>
+            <input type="text" id="event-location-input" class="form-input" placeholder="Örn: 14 Ağustos 2024 • Kaş, Antalya" maxlength="60">
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              <span>Anı Hikayesi / Paragrafı</span>
+              <span id="char-counter" class="char-counter">0 / 550</span>
+            </div>
+            <textarea id="event-paragraph-input" class="form-textarea" placeholder="Bu olayın unutulmaz detaylarını anlatın..." maxlength="550"></textarea>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              <span>Fotoğraflar</span>
+              <span id="photo-count-badge" class="char-counter">Maks. 4 Fotoğraf</span>
+            </div>
+            <div class="photo-uploader">
+              <div class="upload-dropzone" id="event-dropzone">
+                <div class="dropzone-icon">📸</div>
+                <div class="dropzone-text">1 ila 4 fotoğraf seçin veya sürükleyin</div>
+                <div class="dropzone-hint">(Otomatik akıllı kolaj oluşturulur)</div>
+                <input type="file" id="event-files-input" accept="image/*" multiple style="display: none;">
+              </div>
+              <div id="event-thumbs-preview" class="uploaded-thumbnails"></div>
+            </div>
+          </div>
+
+          <button type="button" id="btn-save-event" class="btn btn-primary btn-block">
+            <span>➕</span> Olayı Albüme Ekle
+          </button>
+        </section>
+
+        <!-- 4. Bölüm: Eklenen Olaylar Listesi -->
+        <section class="editor-section">
+          <div class="section-header">
+            <span class="section-title">📚 Eklenen Olaylar (<span id="event-count">0</span>)</span>
+          </div>
+          <div id="events-list-container" class="events-list">
+            <!-- Dinamik Olay Kartları -->
+          </div>
+        </section>
+
+        <!-- 5. Bölüm: Arka Kapak -->
+        <section class="editor-section">
+          <div class="section-header">
+            <span class="section-title">📘 Arka Kapak (Kapanış)</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kapanış Sözü / Not</label>
+            <textarea id="back-quote-input" class="form-textarea" style="min-height: 60px;" placeholder="Örn: “Her yolculuk yeni bir başlangıçtır...”" maxlength="250"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">İmza / Yazar Bilgisi</label>
+            <input type="text" id="back-author-input" class="form-input" placeholder="Örn: Kara Ailesi • 2024" maxlength="60">
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Alt Araçlar & Sıfırlama -->
+      <div class="sidebar-footer">
+        <button id="btn-reset-album" class="btn btn-outline btn-block" style="color: var(--ui-danger); border-color: rgba(239, 68, 68, 0.3);">
+          <span>🗑️</span> Albümü Sıfırla
+        </button>
+      </div>
+    </aside>
+
+    <!-- SAĞ PANEL: CANLI ÖNİZLEME (PREVIEW) -->
+    <main class="preview-pane">
+      <div class="preview-toolbar">
+        <div class="preview-stats">
+          <span id="preview-page-count">Sayfa: 0</span>
+          <span>•</span>
+          <span id="preview-orientation-label">A4 Yatay</span>
+          <span>•</span>
+          <span id="preview-layout-label">Tek Sayfa (Bölünmüş)</span>
+          <span>•</span>
+          <span id="preview-theme-label">Vintage / Parşömen</span>
+        </div>
+        <div class="zoom-controls">
+          <button id="btn-zoom-out" class="zoom-btn" title="Uzaklaştır">－</button>
+          <span id="zoom-text" class="zoom-level">80%</span>
+          <button id="btn-zoom-in" class="zoom-btn" title="Yakınlaştır">＋</button>
+          <button id="btn-zoom-fit" class="zoom-btn" style="width: auto; padding: 0 8px;" title="Ekrana Sığdır">Sığdır</button>
+        </div>
+      </div>
+
+      <!-- Sayfaların Gerçek Boyutlu Görüntülendiği Görünüm Alanı -->
+      <div class="album-viewport" id="album-viewport">
+        <div class="album-container orientation-landscape theme-vintage" id="album-container">
+          <!-- Dinamik Olarak JS ile Doldurulacak Sayfalar -->
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Durum Toast Bildirimi -->
+  <div id="toast-notification" class="toast-notification"></div>
+
+  <!-- Dinamik Yazdırma Sayfa Yönü Stili -->
+  <style id="dynamic-print-style">
+    @page { size: A4 landscape; margin: 0; }
+  </style>
+
+  <!-- Uygulama Betikleri -->
+  <script src="js/image-processor.js"></script>
+  <script src="js/collage.js"></script>
+  <script src="js/sample-data.js"></script>
+  <script src="js/pdf-export.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

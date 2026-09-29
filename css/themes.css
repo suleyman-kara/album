@@ -1,0 +1,105 @@
+/**
+ * themes.css
+ * 4 Hazır Tema için CSS Değişkenleri ve Özel Efektler
+ */
+
+/* ==========================================================================
+   1. KLASİK MİNİMALİST (Modern, Sade, Ferah)
+   ========================================================================== */
+.theme-minimalist {
+  --bg-page: #FCFCFC;
+  --text-main: #18181B;
+  --text-muted: #71717A;
+  --font-title: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --accent-color: #2563EB;
+  --border-color: #E4E4E7;
+  --page-border: 1px solid #F4F4F5;
+  --photo-bg: #FFFFFF;
+  --photo-border: 1px solid #E4E4E7;
+  --photo-radius: 4px;
+  --photo-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --cover-border: none;
+  --num-prefix: '— ';
+  --num-suffix: ' —';
+}
+
+/* ==========================================================================
+   2. VİNTAGE & NOSTALJİ (Sıcak Parşömen, Daktilo/Serif, Polaroid Çerçeve)
+   ========================================================================== */
+.theme-vintage {
+  --bg-page: #FAF3E0;
+  --text-main: #3E2723;
+  --text-muted: #795548;
+  --font-title: 'Playfair Display', Georgia, serif;
+  --font-body: 'Playfair Display', Georgia, serif;
+  --accent-color: #B8860B;
+  --border-color: #D7CCC8;
+  --page-border: 1px dashed #D7CCC8;
+  --photo-bg: #FFFDF9;
+  --photo-border: 8px solid #FFFFFF;
+  --photo-radius: 2px;
+  --photo-shadow: 0 6px 16px rgba(62, 39, 35, 0.15);
+  --cover-border: 2px solid #8D6E63;
+  --num-prefix: '• ';
+  --num-suffix: ' •';
+}
+
+/* Polaroid etkisi */
+.theme-vintage .photo-cell .photo-frame {
+  padding-bottom: 24px;
+  background: #FFFFFF;
+  box-shadow: 0 8px 18px rgba(60, 40, 30, 0.14);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* ==========================================================================
+   3. ROMANTİK & MASALSI (Pastel Gül Kurusu, Zarif İtalik, Kavisli Hatlar)
+   ========================================================================== */
+.theme-romantic {
+  --bg-page: #FFF8F8;
+  --text-main: #3F2327;
+  --text-muted: #8E6E73;
+  --font-title: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Montserrat', sans-serif;
+  --accent-color: #C53030;
+  --border-color: #FED7D7;
+  --page-border: 1px solid #FFE4E6;
+  --photo-bg: #FFFFFF;
+  --photo-border: none;
+  --photo-radius: 12px;
+  --photo-shadow: 0 8px 24px rgba(197, 48, 48, 0.08);
+  --cover-border: 1px solid #FBB6CE;
+  --num-prefix: '♡ ';
+  --num-suffix: ' ♡';
+}
+
+.theme-romantic .story-title {
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   4. GECE GALERİSİ / DARK ELEGANCE (Mat Siyah, Müze Paspartusu, Altın Yaldız)
+   ========================================================================== */
+.theme-dark {
+  --bg-page: #16161A;
+  --text-main: #FFFFFE;
+  --text-muted: #94A1B2;
+  --font-title: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  --accent-color: #ECC94B;
+  --border-color: #242629;
+  --page-border: 1px solid #242629;
+  --photo-bg: #010101;
+  --photo-border: 6px solid #242629;
+  --photo-radius: 2px;
+  --photo-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  --cover-border: 1px solid #ECC94B;
+  --num-prefix: '— ';
+  --num-suffix: ' —';
+}
+
+.theme-dark .photo-cell .photo-frame {
+  border: 1px solid rgba(236, 201, 75, 0.3);
+}
