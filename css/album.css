@@ -217,17 +217,6 @@
   word-break: normal;
 }
 
-/* İlk harf vurgusu (Float yerine inline - html2canvas çakışmasını önler) */
-.story-text::first-letter {
-  font-family: var(--font-title, serif);
-  font-size: 1.6em;
-  font-weight: 700;
-  color: var(--accent-color);
-  margin-right: 2px;
-  line-height: 1;
-  float: none;
-}
-
 /* Sayfa Alt Bilgisi & Numaralandırma */
 .page-footer {
   display: flex;
@@ -498,16 +487,6 @@
   font-size: 13.5px;
   line-height: 1.7;
   text-align: left;
-}
-
-.page-event-split .story-text::first-letter {
-  font-family: var(--font-title, serif);
-  font-size: 1.5em;
-  font-weight: 700;
-  color: var(--accent-color);
-  margin-right: 2px;
-  line-height: 1;
-  float: none;
 }
 
 .page-event-split .collage-wrapper {
