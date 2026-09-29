@@ -84,7 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btnMobileDownloadPdf: document.getElementById('btn-mobile-download-pdf'),
     btnMobilePrint: document.getElementById('btn-mobile-print'),
 
-    // Önizleme Çubuğu & Zoom
+    // Önizleme Çubuğu & Zoom & Aksiyonlar
+    btnPreviewDownloadPdf: document.getElementById('btn-preview-download-pdf'),
+    btnPreviewPrint: document.getElementById('btn-preview-print'),
     previewPageCount: document.getElementById('preview-page-count'),
     previewOrientationLabel: document.getElementById('preview-orientation-label'),
     previewLayoutLabel: document.getElementById('preview-layout-label'),
@@ -831,12 +833,17 @@ document.addEventListener('DOMContentLoaded', () => {
       .toLowerCase()
       .replace(/[^a-z0-9]/gi, '_') + '.pdf';
     
-    el.btnDownloadPdf.disabled = true;
-    if (el.btnMobileDownloadPdf) el.btnMobileDownloadPdf.disabled = true;
-    const oldText = el.btnDownloadPdf.innerHTML;
-    const oldMobileText = el.btnMobileDownloadPdf ? el.btnMobileDownloadPdf.innerHTML : '';
-    el.btnDownloadPdf.innerHTML = '<span>⏳</span> Hazırlanıyor...';
-    if (el.btnMobileDownloadPdf) el.btnMobileDownloadPdf.innerHTML = '<span>⏳</span> Hazırlanıyor...';
+    const downloadBtns = [
+      el.btnDownloadPdf,
+      el.btnPreviewDownloadPdf,
+      el.btnMobileDownloadPdf
+    ].filter(Boolean);
+
+    downloadBtns.forEach(btn => {
+      btn.disabled = true;
+      btn.dataset.origHtml = btn.innerHTML;
+      btn.innerHTML = '<span>⏳</span> Hazırlanıyor...';
+    });
 
     await PDFExporter.downloadPDF(
       el.albumContainer,
@@ -845,12 +852,12 @@ document.addEventListener('DOMContentLoaded', () => {
       (msg) => showToast(msg, 'info')
     );
 
-    el.btnDownloadPdf.disabled = false;
-    el.btnDownloadPdf.innerHTML = oldText;
-    if (el.btnMobileDownloadPdf) {
-      el.btnMobileDownloadPdf.disabled = false;
-      el.btnMobileDownloadPdf.innerHTML = oldMobileText;
-    }
+    downloadBtns.forEach(btn => {
+      btn.disabled = false;
+      if (btn.dataset.origHtml) {
+        btn.innerHTML = btn.dataset.origHtml;
+      }
+    });
   });
 
   if (el.btnLoadSampleSidebar) {
@@ -956,6 +963,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const tab = btn.dataset.tab;
         if (tab) setMobileTab(tab);
       });
+    });
+  }
+
+  // Önizleme Araç Çubuğu Hızlı Aksiyonları
+  if (el.btnPreviewDownloadPdf) {
+    el.btnPreviewDownloadPdf.addEventListener('click', () => {
+      el.btnDownloadPdf.click();
+    });
+  }
+
+  if (el.btnPreviewPrint) {
+    el.btnPreviewPrint.addEventListener('click', () => {
+      el.btnPrint.click();
     });
   }
 
