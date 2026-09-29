@@ -15,7 +15,7 @@ const SampleAlbumData = {
   },
   backCover: {
     quote: '“Her yolculuk yeni bir başlangıç, her anı ömür boyu saklanacak bir hazinedir.”',
-    author: 'Süleyman & Ailesi • 2024'
+    author: 'Bir Yol Hikayesi • 2024'
   },
   events: [
     {

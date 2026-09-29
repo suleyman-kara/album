@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     backCover: {
       quote: '“Her yolculuk yeni bir başlangıç, her anı ömür boyu saklanacak bir hazinedir.”',
-      author: 'Süleyman & Ailesi • 2024'
+      author: 'Bir Yol Hikayesi • 2024'
     },
     events: [],
     // Düzenleme / form anlık durumları
@@ -392,8 +392,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="event-card-meta">${ev.photos ? ev.photos.length : 0} Fotoğraf • ${escapeHtml(ev.date || 'Tarih belirtilmedi')}</div>
           </div>
           <div class="event-actions">
-            <button type="button" class="btn-icon btn-edit-event" data-id="${ev.id}" title="Düzenle">✏️</button>
-            <button type="button" class="btn-icon danger btn-delete-event" data-id="${ev.id}" title="Sil">🗑️</button>
+            <button type="button" class="btn-icon btn-edit-event" data-id="${ev.id}" title="Düzenle">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </button>
+            <button type="button" class="btn-icon danger btn-delete-event" data-id="${ev.id}" title="Sil">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
           </div>
         </div>
       `;
@@ -423,8 +427,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     state.editingEventId = id;
     el.editingEventIdInput.value = id;
-    el.formHeading.textContent = '✏️ Olayı Düzenle';
-    el.btnSaveEvent.innerHTML = '<span>💾</span> Değişiklikleri Kaydet';
+    el.formHeading.textContent = 'Anıyı Düzenle';
+    el.btnSaveEvent.innerHTML = '<span>Değişiklikleri Kaydet</span>';
     el.btnCancelEdit.style.display = 'inline-flex';
 
     el.eventTitleInput.value = event.title || '';
@@ -444,8 +448,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function cancelEditingEvent() {
     state.editingEventId = null;
     el.editingEventIdInput.value = '';
-    el.formHeading.textContent = '✨ Yeni Olay (Anı) Ekle';
-    el.btnSaveEvent.innerHTML = '<span>➕</span> Olayı Albüme Ekle';
+    el.formHeading.textContent = 'Yeni Anı Ekle';
+    el.btnSaveEvent.innerHTML = '<span>Anıyı Albüme Ekle</span>';
     el.btnCancelEdit.style.display = 'none';
 
     el.eventTitleInput.value = '';

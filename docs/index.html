@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FotoAlbüm - Özel Fotoğraf Albümü & PDF Oluşturucu</title>
+  <title>FotoAlbüm Studio - Özel Fotoğraf Albümü & PDF Oluşturucu</title>
 
   <!-- Google Fonts: Inter, Playfair Display, Cormorant Garamond, Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,18 +25,29 @@
   <!-- Üst Başlık Çubuğu -->
   <header class="app-header">
     <div class="app-brand">
-      <div class="brand-icon">📖</div>
-      <span>FotoAlbüm Studio</span>
+      <div class="brand-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">FotoAlbüm</span>
+        <span class="brand-badge">Studio</span>
+      </div>
     </div>
     <div class="header-actions">
       <button id="btn-load-sample" class="btn btn-secondary" title="Sistemi hazır anılarla test edin">
-        <span>✨</span> Örnek Albüm Yükle
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"></path></svg>
+        <span>Örnek Albüm</span>
       </button>
-      <button id="btn-print" class="btn btn-outline" title="Tarayıcının yerel yazdırma penceresi ile vektörel kaydet">
-        <span>🖨️</span> Yazdır / PDF Kaydet
+      <button id="btn-print" class="btn btn-outline" title="Tarayıcının yerel yazdırma penceresi ile 300 DPI kaydet">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        <span>Yazdır</span>
       </button>
-      <button id="btn-download-pdf" class="btn btn-success" title="Tek tıkla hazır PDF dosyasını indir">
-        <span>📥</span> PDF İndir
+      <button id="btn-download-pdf" class="btn btn-primary" title="Tek tıkla hazır PDF dosyasını indir">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span>PDF İndir</span>
       </button>
     </div>
   </header>
@@ -51,31 +62,31 @@
         <!-- 1. Bölüm: Sayfa Yönü, Düzeni & Tema -->
         <section class="editor-section">
           <div class="section-header">
-            <span class="section-title">📐 Sayfa Yönü (Format)</span>
+            <span class="section-title">Sayfa Yönü</span>
           </div>
           <div class="toggle-group">
             <button type="button" class="toggle-btn active" data-orientation="landscape">
-              <span>🖼️</span> A4 Yatay
+              A4 Yatay
             </button>
             <button type="button" class="toggle-btn" data-orientation="portrait">
-              <span>📄</span> A4 Dikey
+              A4 Dikey
             </button>
           </div>
 
-          <div class="section-header" style="margin-top: 8px;">
-            <span class="section-title">📑 Sayfa Düzeni (Mizanpaj)</span>
+          <div class="section-header" style="margin-top: 10px;">
+            <span class="section-title">Mizanpaj Düzeni</span>
           </div>
           <div class="toggle-group">
             <button type="button" class="toggle-btn active" data-layout="split" title="Her olay tek sayfada: yarısı metin, yarısı kolaj">
-              <span>🌗</span> Tek Sayfa (Bölünmüş)
+              Tek Sayfa (Bölünmüş)
             </button>
             <button type="button" class="toggle-btn" data-layout="spread" title="Her olay 2 sayfa: sol sayfa metin, sağ sayfa kolaj">
-              <span>📖</span> İki Sayfa (Geniş)
+              İki Sayfa (Geniş)
             </button>
           </div>
 
-          <div class="section-header" style="margin-top: 8px;">
-            <span class="section-title">🎨 Albüm Teması</span>
+          <div class="section-header" style="margin-top: 10px;">
+            <span class="section-title">Tasarım Teması</span>
           </div>
           <div class="theme-grid">
             <div class="theme-card" data-theme="minimalist">
@@ -84,7 +95,7 @@
             </div>
             <div class="theme-card active" data-theme="vintage">
               <div class="theme-preview-box preview-vintage">Aa</div>
-              <span class="theme-label">Vintage / Parşömen</span>
+              <span class="theme-label">Vintage Parşömen</span>
             </div>
             <div class="theme-card" data-theme="romantic">
               <div class="theme-preview-box preview-romantic">Aa</div>
@@ -100,7 +111,7 @@
         <!-- 2. Bölüm: Ön Kapak Bilgileri -->
         <section class="editor-section">
           <div class="section-header">
-            <span class="section-title">📕 Ön Kapak Bilgileri</span>
+            <span class="section-title">Ön Kapak</span>
           </div>
           <div class="form-group">
             <label class="form-label">Albüm Başlığı</label>
@@ -118,9 +129,11 @@
             <label class="form-label">Kapak Fotoğrafı</label>
             <div class="photo-uploader">
               <div class="upload-dropzone" id="cover-dropzone">
-                <div class="dropzone-icon">🖼️</div>
-                <div class="dropzone-text">Kapak fotoğrafı seçin veya sürükleyin</div>
-                <div class="dropzone-hint">(Otomatik 1080p WebP'ye optimize edilir)</div>
+                <div class="dropzone-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                </div>
+                <div class="dropzone-text">Fotoğraf seçin veya sürükleyin</div>
+                <div class="dropzone-hint">Otomatik 1080p WebP'ye optimize edilir</div>
                 <input type="file" id="cover-file-input" accept="image/*" style="display: none;">
               </div>
               <div id="cover-thumb-preview" class="uploaded-thumbnails" style="grid-template-columns: 80px;"></div>
@@ -131,14 +144,14 @@
         <!-- 3. Bölüm: Olay (Anı) Ekle / Düzenle Formu -->
         <section class="editor-section">
           <div class="section-header">
-            <span class="section-title" id="form-event-heading">✨ Yeni Olay (Anı) Ekle</span>
+            <span class="section-title" id="form-event-heading">Yeni Anı Ekle</span>
             <button type="button" id="btn-cancel-edit" class="btn-icon" style="display: none;" title="Düzenlemeyi İptal Et">✕</button>
           </div>
           
           <input type="hidden" id="editing-event-id" value="">
 
           <div class="form-group">
-            <label class="form-label">Olay Başlığı</label>
+            <label class="form-label">Anı Başlığı</label>
             <input type="text" id="event-title-input" class="form-input" placeholder="Örn: Kaş & Kaputaş’ın Büyüsü" maxlength="70">
           </div>
 
@@ -149,10 +162,10 @@
 
           <div class="form-group">
             <div class="form-label">
-              <span>Anı Hikayesi / Paragrafı</span>
+              <span>Anı Metni</span>
               <span id="char-counter" class="char-counter">0 / 550</span>
             </div>
-            <textarea id="event-paragraph-input" class="form-textarea" placeholder="Bu olayın unutulmaz detaylarını anlatın..." maxlength="550"></textarea>
+            <textarea id="event-paragraph-input" class="form-textarea" placeholder="Bu anının detaylarını anlatın..." maxlength="550"></textarea>
           </div>
 
           <div class="form-group">
@@ -162,24 +175,26 @@
             </div>
             <div class="photo-uploader">
               <div class="upload-dropzone" id="event-dropzone">
-                <div class="dropzone-icon">📸</div>
+                <div class="dropzone-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                </div>
                 <div class="dropzone-text">1 ila 4 fotoğraf seçin veya sürükleyin</div>
-                <div class="dropzone-hint">(Otomatik akıllı kolaj oluşturulur)</div>
+                <div class="dropzone-hint">Akıllı ızgarada otomatik kolajlanır</div>
                 <input type="file" id="event-files-input" accept="image/*" multiple style="display: none;">
               </div>
               <div id="event-thumbs-preview" class="uploaded-thumbnails"></div>
             </div>
           </div>
 
-          <button type="button" id="btn-save-event" class="btn btn-primary btn-block">
-            <span>➕</span> Olayı Albüme Ekle
+          <button type="button" id="btn-save-event" class="btn btn-action btn-block">
+            <span>Anıyı Albüme Ekle</span>
           </button>
         </section>
 
         <!-- 4. Bölüm: Eklenen Olaylar Listesi -->
         <section class="editor-section">
           <div class="section-header">
-            <span class="section-title">📚 Eklenen Olaylar (<span id="event-count">0</span>)</span>
+            <span class="section-title">Anı Listesi (<span id="event-count">0</span>)</span>
           </div>
           <div id="events-list-container" class="events-list">
             <!-- Dinamik Olay Kartları -->
@@ -189,15 +204,15 @@
         <!-- 5. Bölüm: Arka Kapak -->
         <section class="editor-section">
           <div class="section-header">
-            <span class="section-title">📘 Arka Kapak (Kapanış)</span>
+            <span class="section-title">Arka Kapak</span>
           </div>
           <div class="form-group">
-            <label class="form-label">Kapanış Sözü / Not</label>
+            <label class="form-label">Kapanış Notu</label>
             <textarea id="back-quote-input" class="form-textarea" style="min-height: 60px;" placeholder="Örn: “Her yolculuk yeni bir başlangıçtır...”" maxlength="250"></textarea>
           </div>
           <div class="form-group">
             <label class="form-label">İmza / Yazar Bilgisi</label>
-            <input type="text" id="back-author-input" class="form-input" placeholder="Örn: Kara Ailesi • 2024" maxlength="60">
+            <input type="text" id="back-author-input" class="form-input" placeholder="Örn: Bir Yol Hikayesi • 2024" maxlength="60">
           </div>
         </section>
 
@@ -205,8 +220,8 @@
 
       <!-- Alt Araçlar & Sıfırlama -->
       <div class="sidebar-footer">
-        <button id="btn-reset-album" class="btn btn-outline btn-block" style="color: var(--ui-danger); border-color: rgba(239, 68, 68, 0.3);">
-          <span>🗑️</span> Albümü Sıfırla
+        <button id="btn-reset-album" class="btn btn-danger-outline btn-block">
+          <span>Albümü Sıfırla</span>
         </button>
       </div>
     </aside>
@@ -216,22 +231,22 @@
       <div class="preview-toolbar">
         <div class="preview-stats">
           <span id="preview-page-count">Sayfa: 0</span>
-          <span>•</span>
+          <span class="stats-sep">•</span>
           <span id="preview-orientation-label">A4 Yatay</span>
-          <span>•</span>
+          <span class="stats-sep">•</span>
           <span id="preview-layout-label">Tek Sayfa (Bölünmüş)</span>
-          <span>•</span>
-          <span id="preview-theme-label">Vintage / Parşömen</span>
+          <span class="stats-sep">•</span>
+          <span id="preview-theme-label">Vintage Parşömen</span>
         </div>
         <div class="zoom-controls">
           <button id="btn-zoom-out" class="zoom-btn" title="Uzaklaştır">－</button>
-          <span id="zoom-text" class="zoom-level">80%</span>
+          <span id="zoom-text" class="zoom-level">75%</span>
           <button id="btn-zoom-in" class="zoom-btn" title="Yakınlaştır">＋</button>
-          <button id="btn-zoom-fit" class="zoom-btn" style="width: auto; padding: 0 8px;" title="Ekrana Sığdır">Sığdır</button>
+          <button id="btn-zoom-fit" class="zoom-btn btn-fit" title="Ekrana Sığdır">Sığdır</button>
         </div>
       </div>
 
-      <!-- Sayfaların Gerçek Boyutlu Görüntülendiği Görünüm Alanı -->
+      <!-- Sayfaların Gerçek Boyutlu Görüntülendiği Çalışma Alanı -->
       <div class="album-viewport" id="album-viewport">
         <div class="album-container orientation-landscape theme-vintage" id="album-container">
           <!-- Dinamik Olarak JS ile Doldurulacak Sayfalar -->
