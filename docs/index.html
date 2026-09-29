@@ -20,7 +20,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-<body>
+<body data-mobile-tab="edit">
 
   <!-- Üst Başlık Çubuğu -->
   <header class="app-header">
@@ -219,8 +219,12 @@
       </div>
 
       <!-- Alt Araçlar & Sıfırlama -->
-      <div class="sidebar-footer">
-        <button id="btn-reset-album" class="btn btn-danger-outline btn-block">
+      <div class="sidebar-footer" style="display: flex; gap: 8px;">
+        <button id="btn-load-sample-sidebar" class="btn btn-secondary" style="flex: 1;" title="Örnek anılar ve fotoğraflar yükle">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"></path></svg>
+          <span>Örnek Yükle</span>
+        </button>
+        <button id="btn-reset-album" class="btn btn-danger-outline" style="flex: 1;">
           <span>Albümü Sıfırla</span>
         </button>
       </div>
@@ -252,9 +256,34 @@
           <!-- Dinamik Olarak JS ile Doldurulacak Sayfalar -->
         </div>
       </div>
+
+      <!-- Mobil Önizleme Hızlı Eylem Çubuğu -->
+      <div class="mobile-preview-actions" id="mobile-preview-actions">
+        <button id="btn-mobile-download-pdf" class="btn btn-primary" style="flex: 1;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>PDF İndir</span>
+        </button>
+        <button id="btn-mobile-print" class="btn btn-secondary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          <span>Yazdır</span>
+        </button>
+      </div>
     </main>
 
   </div>
+
+  <!-- Mobil Alt Navigasyon Çubuğu (Sadece < 900px Ekranlarda Görünür) -->
+  <nav class="mobile-nav-bar" id="mobile-nav-bar">
+    <button type="button" class="mobile-nav-btn active" data-tab="edit">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+      <span>Düzenle</span>
+    </button>
+    <button type="button" class="mobile-nav-btn" data-tab="preview">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+      <span>Önizle & İndir</span>
+      <span id="mobile-page-badge" class="mobile-badge">5</span>
+    </button>
+  </nav>
 
   <!-- Durum Toast Bildirimi -->
   <div id="toast-notification" class="toast-notification"></div>

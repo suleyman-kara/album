@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     layoutMode: 'split',      // 'split' (tek sayfa bölünmüş) | 'spread' (iki sayfa geniş)
     theme: 'vintage',        // 'minimalist' | 'vintage' | 'romantic' | 'dark'
     zoom: 0.75,              // Önizleme yakınlaştırma oranı
+    mobileTab: 'edit',       // 'edit' | 'preview'
     cover: {
       title: 'Ege & Akdeniz Yolculuğu',
       subtitle: 'Masmavi Koylar, Tarihi Sokaklar ve Unutulmaz Anlar',
@@ -75,6 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
     btnPrint: document.getElementById('btn-print'),
     btnDownloadPdf: document.getElementById('btn-download-pdf'),
     btnResetAlbum: document.getElementById('btn-reset-album'),
+    btnLoadSampleSidebar: document.getElementById('btn-load-sample-sidebar'),
+
+    // Mobil Navigasyon & Hızlı Aksiyonlar
+    mobileNavBtns: document.querySelectorAll('.mobile-nav-btn'),
+    mobilePageBadge: document.getElementById('mobile-page-badge'),
+    btnMobileDownloadPdf: document.getElementById('btn-mobile-download-pdf'),
+    btnMobilePrint: document.getElementById('btn-mobile-print'),
 
     // Önizleme Çubuğu & Zoom
     previewPageCount: document.getElementById('preview-page-count'),
@@ -114,6 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. BAŞLANGIÇ YÜKLEMESİ (STORAGE VEYA ÖRNEK VERİ)
   // ==========================================================================
   function init() {
+    document.body.dataset.mobileTab = state.mobileTab;
+
     const saved = localStorage.getItem('fotoalbum_state');
     if (saved) {
       try {
@@ -132,7 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
     renderEventsList();
     renderFormPhotos();
     renderCoverThumb();
-    updateZoom();
+    if (window.innerWidth < 900) {
+      fitMobileZoom();
+    } else {
+      updateZoom();
+    }
   }
 
   function loadSampleData() {
@@ -205,6 +219,9 @@ document.addEventListener('DOMContentLoaded', () => {
       : 2 + (state.events.length * 2);
 
     el.previewPageCount.textContent = `Toplam ${totalPages} Sayfa (${state.events.length} Olay)`;
+    if (el.mobilePageBadge) {
+      el.mobilePageBadge.textContent = totalPages;
+    }
     el.previewOrientationLabel.textContent = state.orientation === 'landscape' ? 'A4 Yatay' : 'A4 Dikey';
     if (el.previewLayoutLabel) {
       el.previewLayoutLabel.textContent = state.layoutMode === 'split' ? 'Tek Sayfa (Bölünmüş)' : 'İki Sayfa (Geniş)';
@@ -366,6 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     container.innerHTML = html;
     updateToolbarStats();
+    updateZoom();
   }
 
   // ==========================================================================
@@ -424,6 +442,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function startEditingEvent(id) {
     const event = state.events.find(e => e.id === id);
     if (!event) return;
+
+    if (state.mobileTab !== 'edit') {
+      setMobileTab('edit');
+    }
 
     state.editingEventId = id;
     el.editingEventIdInput.value = id;
@@ -544,6 +566,9 @@ document.addEventListener('DOMContentLoaded', () => {
       state.orientation = orientation;
       el.orientationBtns.forEach(b => b.classList.toggle('active', b === btn));
       renderAlbum();
+      if (window.innerWidth < 900) {
+        fitMobileZoom();
+      }
       saveToStorage();
       showToast(`Sayfa yönü: ${orientation === 'landscape' ? 'A4 Yatay' : 'A4 Dikey'} olarak güncellendi.`);
     });
@@ -807,8 +832,11 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/[^a-z0-9]/gi, '_') + '.pdf';
     
     el.btnDownloadPdf.disabled = true;
+    if (el.btnMobileDownloadPdf) el.btnMobileDownloadPdf.disabled = true;
     const oldText = el.btnDownloadPdf.innerHTML;
+    const oldMobileText = el.btnMobileDownloadPdf ? el.btnMobileDownloadPdf.innerHTML : '';
     el.btnDownloadPdf.innerHTML = '<span>⏳</span> Hazırlanıyor...';
+    if (el.btnMobileDownloadPdf) el.btnMobileDownloadPdf.innerHTML = '<span>⏳</span> Hazırlanıyor...';
 
     await PDFExporter.downloadPDF(
       el.albumContainer,
@@ -819,7 +847,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     el.btnDownloadPdf.disabled = false;
     el.btnDownloadPdf.innerHTML = oldText;
+    if (el.btnMobileDownloadPdf) {
+      el.btnMobileDownloadPdf.disabled = false;
+      el.btnMobileDownloadPdf.innerHTML = oldMobileText;
+    }
   });
+
+  if (el.btnLoadSampleSidebar) {
+    el.btnLoadSampleSidebar.addEventListener('click', () => {
+      el.btnLoadSample.click();
+    });
+  }
 
   el.btnResetAlbum.addEventListener('click', () => {
     if (confirm('Tüm albüm ve eklenen anılar silinsin mi? Bu işlem geri alınamaz.')) {
@@ -838,11 +876,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // G. Zoom Kontrolleri
+  // G. Zoom Kontrolleri ve Mobil Otomatik Sığdırma
   function updateZoom() {
-    el.zoomText.textContent = `${Math.round(state.zoom * 100)}%`;
-    el.albumContainer.style.transform = `scale(${state.zoom})`;
-    el.albumContainer.style.transformOrigin = 'top center';
+    if (el.zoomText) {
+      el.zoomText.textContent = `${Math.round(state.zoom * 100)}%`;
+    }
+    if (el.albumContainer) {
+      el.albumContainer.style.transform = `scale(${state.zoom})`;
+      el.albumContainer.style.transformOrigin = 'top center';
+
+      // CSS Transform ölçeklemesinden kaynaklanan boşluk farkını (phantom scroll) dengele
+      const unscaledHeight = el.albumContainer.offsetHeight;
+      if (unscaledHeight > 0) {
+        const scaledHeight = unscaledHeight * state.zoom;
+        const heightDiff = unscaledHeight - scaledHeight;
+        el.albumContainer.style.marginBottom = `-${Math.max(0, heightDiff)}px`;
+      }
+    }
+  }
+
+  function fitMobileZoom() {
+    const viewportWidth = el.albumViewport ? (el.albumViewport.clientWidth - 20) : (window.innerWidth - 20);
+    const pageWidthMm = state.orientation === 'landscape' ? 297 : 210;
+    // 1mm ~ 3.78px at 96 DPI
+    const estimatedPx = pageWidthMm * 3.78;
+    const availableWidth = Math.max(viewportWidth, 260);
+    const fitRatio = Math.min(Math.max(availableWidth / estimatedPx, 0.2), 1.0);
+    state.zoom = Math.round(fitRatio * 100) / 100;
+    updateZoom();
+  }
+
+  function setMobileTab(tab) {
+    state.mobileTab = tab;
+    document.body.dataset.mobileTab = tab;
+    if (el.mobileNavBtns) {
+      el.mobileNavBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+      });
+    }
+
+    if (tab === 'preview') {
+      // Sekme açıldığında içeriği ölçüp ekrana tam sığdır
+      requestAnimationFrame(() => {
+        fitMobileZoom();
+        if (el.albumViewport) {
+          el.albumViewport.scrollTop = 0;
+        }
+      });
+    }
   }
 
   el.btnZoomIn.addEventListener('click', () => {
@@ -853,20 +934,47 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   el.btnZoomOut.addEventListener('click', () => {
-    if (state.zoom > 0.4) {
+    if (state.zoom > 0.3) {
       state.zoom -= 0.1;
       updateZoom();
     }
   });
 
   el.btnZoomFit.addEventListener('click', () => {
-    const viewportWidth = el.albumViewport.clientWidth - 40;
+    const viewportWidth = el.albumViewport ? (el.albumViewport.clientWidth - 32) : (window.innerWidth - 32);
     const pageWidthMm = state.orientation === 'landscape' ? 297 : 210;
-    // 1mm ~ 3.78px at 96 DPI
     const estimatedPx = pageWidthMm * 3.78;
-    const fitRatio = Math.min(Math.max(viewportWidth / estimatedPx, 0.4), 1.0);
+    const fitRatio = Math.min(Math.max(viewportWidth / estimatedPx, 0.2), 1.2);
     state.zoom = Math.round(fitRatio * 100) / 100;
     updateZoom();
+  });
+
+  // H. Mobil Dinleyiciler
+  if (el.mobileNavBtns) {
+    el.mobileNavBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        if (tab) setMobileTab(tab);
+      });
+    });
+  }
+
+  if (el.btnMobileDownloadPdf) {
+    el.btnMobileDownloadPdf.addEventListener('click', () => {
+      el.btnDownloadPdf.click();
+    });
+  }
+
+  if (el.btnMobilePrint) {
+    el.btnMobilePrint.addEventListener('click', () => {
+      el.btnPrint.click();
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth < 900 && state.mobileTab === 'preview') {
+      fitMobileZoom();
+    }
   });
 
   // ==========================================================================

@@ -668,21 +668,176 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Duyarlılık */
-@media (max-width: 1024px) {
-  body {
-    overflow: auto;
-    height: auto;
+/* ==========================================================================
+   MOBİL NAVİGASYON VE DUYARLILIK (RESPONSIVE & MOBILE)
+   ========================================================================== */
+
+/* Masaüstünde mobil çubukları gizle */
+.mobile-nav-bar,
+.mobile-preview-actions {
+  display: none !important;
+}
+
+/* MOBİL VE TABLET EKRANLARI (< 900px) */
+@media (max-width: 899px) {
+  /* Masaüstü üst butonlarını mobilde gizle */
+  .app-header .header-actions {
+    display: none;
   }
+
+  /* Mobil Düzen Yüksekliği */
   .app-layout {
-    flex-direction: column;
-    height: auto;
+    height: calc(100vh - 52px - 56px);
+    height: calc(100dvh - 52px - 56px - env(safe-area-inset-bottom, 0px));
+    overflow: hidden;
   }
-  .app-sidebar {
+
+  /* Sekmeli Geçiş Mantığı */
+  body[data-mobile-tab="edit"] .app-sidebar {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-right: none;
+  }
+
+  body[data-mobile-tab="edit"] .preview-pane {
+    display: none !important;
+  }
+
+  body[data-mobile-tab="preview"] .app-sidebar {
+    display: none !important;
+  }
+
+  body[data-mobile-tab="preview"] .preview-pane {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    position: relative;
+  }
+
+  /* Mobil Önizleme Çubuğu */
+  .preview-toolbar {
+    height: 40px;
+    padding: 0 12px;
+  }
+
+  .preview-stats .stats-sep,
+  #preview-orientation-label,
+  #preview-theme-label {
+    display: none;
+  }
+
+  .album-viewport {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 16px 8px 84px 8px !important;
+  }
+
+  /* Mobil Önizleme Hızlı Eylem Çubuğu */
+  .mobile-preview-actions {
+    display: flex !important;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    height: auto;
+    padding: 10px 14px;
+    background: rgba(18, 18, 20, 0.94);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--ui-border);
+    gap: 8px;
+    z-index: 30;
   }
-  .preview-pane {
-    height: 100vh;
+
+  /* Mobil Alt Navigasyon Çubuğu */
+  .mobile-nav-bar {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: calc(56px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: rgba(18, 18, 20, 0.98);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--ui-border);
+    z-index: 50;
+    align-items: stretch;
+  }
+
+  .mobile-nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: transparent;
+    border: none;
+    color: var(--ui-text-muted);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    touch-action: manipulation;
+    transition: color 0.15s ease;
+  }
+
+  .mobile-nav-btn svg {
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
+  }
+
+  .mobile-nav-btn.active {
+    color: #FFFFFF;
+  }
+
+  .mobile-nav-btn.active svg {
+    opacity: 1;
+    stroke: #FFFFFF;
+  }
+
+  .mobile-badge {
+    position: absolute;
+    top: 6px;
+    right: calc(50% - 28px);
+    background: #27272A;
+    color: #FAFAFA;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 8px;
+    border: 1px solid var(--ui-border);
+  }
+
+  /* Dokunmatik Dostu Form Kontrolleri (42px - 44px min-height) */
+  .form-input,
+  .form-textarea {
+    font-size: 16px !important; /* iOS Safari otomatik yakınlaşmasını engeller */
+    padding: 10px 12px;
+  }
+
+  .toggle-btn {
+    min-height: 42px;
+    font-size: 13px;
+    touch-action: manipulation;
+  }
+
+  .btn {
+    min-height: 42px;
+    touch-action: manipulation;
+  }
+
+  .theme-card {
+    padding: 12px;
+  }
+
+  .upload-dropzone {
+    padding: 20px 14px;
+  }
+
+  .thumb-item .thumb-remove {
+    opacity: 1; /* Dokunmatik ekranda hover olmadığından her zaman görünür */
+    width: 24px;
+    height: 24px;
   }
 }
