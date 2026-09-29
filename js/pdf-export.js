@@ -1,55 +1,77 @@
 /**
  * pdf-export.js
- * html2pdf.js ile tek tıkla doğrudan PDF indirme ve window.print() ile
- * 300 DPI vektörel baskı almayı sağlayan modül.
+ * Sayfa sayfa (Page-by-Page) garantili ve taşmasız PDF indirme ile
+ * window.print() 300 DPI vektörel baskı modülü.
  */
 
 const PDFExporter = {
   /**
-   * Albümü PDF olarak oluşturup indirir.
+   * Albüm sayfalarını tek tek işleyerek sıfır boş sayfa garantisiyle PDF oluşturur.
    * @param {HTMLElement} element - Dışa aktarılacak albüm konteyneri
    * @param {string} orientation - 'landscape' veya 'portrait'
    * @param {string} filename - İndirilecek dosya adı
    * @param {function} onProgress - Durum güncelleme geri çağırımı
    */
   async downloadPDF(element, orientation = 'landscape', filename = 'fotograf-albumum.pdf', onProgress = null) {
-    if (typeof html2pdf === 'undefined') {
+    const pages = element.querySelectorAll('.album-page');
+    if (!pages || pages.length === 0) {
+      alert('Dışa aktarılacak sayfa bulunamadı.');
+      return;
+    }
+
+    if (typeof html2canvas === 'undefined') {
+      alert('Görsel işleme kütüphanesi yüklenemedi. Alternatif olarak "Yazdır / PDF Kaydet" butonunu kullanabilirsiniz.');
+      return;
+    }
+
+    const jsPDFConstructor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+    if (!jsPDFConstructor) {
       alert('PDF oluşturucu kütüphanesi yüklenemedi. Alternatif olarak "Yazdır / PDF Kaydet" butonunu kullanabilirsiniz.');
       return;
     }
 
-    if (onProgress) onProgress('PDF hazırlanıyor, sayfalar taranıyor...');
+    const totalPages = pages.length;
+    if (onProgress) onProgress(`PDF hazırlanıyor... (Toplam ${totalPages} sayfa)`);
 
-    // html2pdf seçenekleri
-    const opt = {
-      margin: 0,
-      filename: filename,
-      image: { type: 'jpeg', quality: 0.96 },
-      html2canvas: {
-        scale: 2, // 2x retina netliği
-        useCORS: true, // Harici Unsplash / CDN görselleri için CORS
-        allowTaint: true,
-        letterRendering: true,
-        logging: false
-      },
-      jsPDF: {
-        unit: 'mm',
-        format: 'a4',
-        orientation: orientation,
-        compress: true
-      },
-      pagebreak: {
-        mode: ['css', 'legacy'],
-        before: '.album-page:not(:first-child)'
-      }
-    };
+    const pdf = new jsPDFConstructor({
+      orientation: orientation,
+      unit: 'mm',
+      format: 'a4',
+      compress: true
+    });
 
+    const pageWidth = orientation === 'landscape' ? 297 : 210;
+    const pageHeight = orientation === 'landscape' ? 210 : 297;
+
+    // Zoom transformunu geçici olarak kaldır
     const oldTransform = element.style.transform;
     element.style.transform = 'none';
 
     try {
-      if (onProgress) onProgress('Sayfalar işleniyor, lütfen bekleyin...');
-      await html2pdf().set(opt).from(element).save();
+      for (let i = 0; i < totalPages; i++) {
+        const pageEl = pages[i];
+        if (onProgress) onProgress(`Sayfa ${i + 1} / ${totalPages} işleniyor...`);
+
+        const canvas = await html2canvas(pageEl, {
+          scale: 2, // 2x retina netliği
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          backgroundColor: null
+        });
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+        if (i > 0) {
+          pdf.addPage('a4', orientation);
+        }
+
+        // Sayfa sınırlarına piksel taşmasız tam yerleştir
+        pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight, undefined, 'FAST');
+      }
+
+      if (onProgress) onProgress('PDF dosyası oluşturuluyor...');
+      pdf.save(filename);
       if (onProgress) onProgress('PDF başarıyla indirildi!');
     } catch (error) {
       console.error('PDF oluşturma hatası:', error);

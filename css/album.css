@@ -39,8 +39,6 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  page-break-after: always;
-  break-after: page;
 }
 
 /* YATAY (LANDSCAPE) */
@@ -211,25 +209,23 @@
 }
 
 .story-text {
-  font-size: 15.5px;
-  line-height: 1.9;
+  font-size: 15px;
+  line-height: 1.85;
   color: var(--text-main);
   margin: 0;
-  text-align: justify;
-  hyphens: auto;
-  word-break: break-word;
+  text-align: left;
+  word-break: normal;
 }
 
-/* İlk harf Drop-Cap süslemesi */
+/* İlk harf vurgusu (Float yerine inline - html2canvas çakışmasını önler) */
 .story-text::first-letter {
   font-family: var(--font-title, serif);
-  font-size: 3.4em;
-  float: left;
-  line-height: 0.8;
-  margin-right: 12px;
-  margin-top: 4px;
+  font-size: 1.6em;
+  font-weight: 700;
   color: var(--accent-color);
-  font-weight: bold;
+  margin-right: 2px;
+  line-height: 1;
+  float: none;
 }
 
 /* Sayfa Alt Bilgisi & Numaralandırma */
@@ -501,13 +497,17 @@
 .page-event-split .story-text {
   font-size: 13.5px;
   line-height: 1.7;
+  text-align: left;
 }
 
 .page-event-split .story-text::first-letter {
-  font-size: 2.6em;
-  line-height: 0.8;
-  margin-right: 8px;
-  margin-top: 2px;
+  font-family: var(--font-title, serif);
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin-right: 2px;
+  line-height: 1;
+  float: none;
 }
 
 .page-event-split .collage-wrapper {
